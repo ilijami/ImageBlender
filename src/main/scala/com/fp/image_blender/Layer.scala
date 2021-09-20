@@ -41,6 +41,6 @@ class Layer {
   }
 
   override def toString: String = {
-    name + "|" + imagePath + "|" + isActive.value
+    name + "|" + imagePath + "|" + isActive.value + "|" + opacity.value
   }
 }

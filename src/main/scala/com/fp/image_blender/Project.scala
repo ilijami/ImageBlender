@@ -3,8 +3,11 @@ package com.fp.image_blender
 import com.fp.image_blender.utils.Serialization.{DeserializeProjectFromDPB, SerializeProjectToDPB}
 import scalafx.beans.property.StringProperty
 import scalafx.collections.ObservableBuffer
+import scalafx.embed.swing.SwingFXUtils
 
+import java.awt.image.BufferedImage
 import java.io.{BufferedOutputStream, BufferedWriter, File, FileInputStream, FileOutputStream, FileWriter}
+import javax.imageio.ImageIO
 object Project {
   class Project {
     var name: StringProperty = new StringProperty()
@@ -46,6 +49,14 @@ object Project {
     }
 
     def saveToFile(file: File) {
+      for(layer <- layers) {
+        val combinedImage = new BufferedImage(layer.writableImage.width.value.toInt, layer.writableImage.height.value.toInt, BufferedImage.TYPE_INT_ARGB)
+        val graphics = combinedImage.getGraphics
+        graphics.drawImage(SwingFXUtils.fromFXImage(layer.writableImage, null), 0, 0, null)
+        val newPath = "resources" + File.separator + layer.name + ".png";
+        ImageIO.write(combinedImage, "png", new File(newPath))
+        layer.imagePath = newPath
+      }
       val serializedProject = SerializeProjectToDPB(this)
       val bos = new BufferedOutputStream(new FileOutputStream(file.getPath))
       bos.write(serializedProject)

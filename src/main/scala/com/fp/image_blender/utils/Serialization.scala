@@ -29,7 +29,7 @@ object Serialization {
     for(index <- 1 until lines.length) {
       if (index < layerCount + 1) {
         val serializedLayer = lines.apply(index).split('|')
-        val layer = new Layer(serializedLayer(0), serializedLayer(1), serializedLayer(2).toBoolean)
+        val layer = new Layer(serializedLayer(0), serializedLayer(1), serializedLayer(2).toBoolean, false, serializedLayer(3).toDouble)
         project.addNewLayer(layer)
       } else {
         val selectionStr = lines.apply(index).split('|')
